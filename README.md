@@ -1,3 +1,17 @@
+# Loading Examples into Repl: 
+
+`#r "C:/Users/tireilly/GitHub/functional-csharp-code/Examples/bin/Debug/netcoreapp2.0/Examples.dll"`
+
+Then you can do: 
+
+`using Examples.Purity.ListFormatter.Parallel.InfiniteSequence;`
+
+Then I'm not sure. 
+
+
+
+
+
 # Functional Programming in C# #
 
 This repo contains the code samples, exercises and solutions for the book

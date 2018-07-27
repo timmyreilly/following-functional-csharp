@@ -4,8 +4,9 @@ using System.Collections.Specialized;
 //using System.Configuration;
 using LaYumba.Functional;
 using static LaYumba.Functional.F;
-using static LaYumba.Functional.Enum; 
+using static LaYumba.Functional.Enum;
 using System.Text.RegularExpressions;
+using System.Linq; 
 
 namespace Exercises.Chapter3
 {
@@ -43,7 +44,7 @@ namespace Exercises.Chapter3
             return None;
         }
 
-        new List<int> { 4, 4, 5 }.Lookup((int i) => i % 2 == 1)
+        // new List<int> { 4, 4, 5 }.Lookup((int i) => i % 2 == 1);
 
         // 3 Write a type Email that wraps an underlying string, enforcing that it’s in a valid
         // format. Ensure that you include the following:
@@ -51,7 +52,7 @@ namespace Exercises.Chapter3
         // - Implicit conversion to string, so that it can easily be used with the typical API
         // for sending emails
 
-    public class Email
+        public class Email
         {
             static readonly Regex regex = new Regex(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");
 
@@ -66,6 +67,22 @@ namespace Exercises.Chapter3
 
             public static implicit operator string(Email e)
                => e.Value;
+        }
+
+        public class EmailAgain
+        {
+            static readonly Regex regex = new Regex(@"^([]"); 
+            private string Value { get; }
+
+            private EmailAgain(string value) => Value = value;
+
+            public static Option<EmailAgain> Create(string s)
+                => regex.IsMatch(s)
+                ? Some(new EmailAgain(s))
+                : None;
+
+            public static implicit operator string(EmailAgain e)
+                => e.Value; 
         }
 
         // 4 Take a look at the extension methods defined on IEnumerable inSystem.LINQ.Enumerable.

@@ -132,3 +132,5 @@ You're now ready to experiment with functional code right in the REPL, for examp
   $ cd Exercises
   $ dotnet test
   ```
+
+`#r "C:\Users\tireilly\GitHub\functional-csharp-code\LaYumba.Functional\bin\Debug\netstandard1.6\LaYumba.Functional.dll"`

@@ -14,7 +14,7 @@ namespace Exercises.Chapter3
         // Enum.Parse<DayOfWeek>("Freeday") // => None
         enum DayOfWeek { Monday, Tuesday, Wednesday }
 
-        string greet(Option<DayOfWeek> day) => 
+        // string greet(Option<DayOfWeek> day) => 
   
 
         // 2 Write a Lookup function that will take an IEnumerable and a predicate, and

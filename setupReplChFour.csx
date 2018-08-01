@@ -53,6 +53,9 @@ public static class AskForValidAgeAndPrintFlatteringMessage
     }
 }
 
+bool IsNatural(int i) => i >= 0; 
+Option<int> ToNatural(string s) => Int.Parse(s).Where(IsNatural); 
+
 /*
 // #r "..\tireilly\GitHub\functional-csharp-code\LaYumba.Functional.Data\bin\Debug\netstandard1.6\LaYumba.Functional.Data.dll"
 // #r "..\tireilly\GitHub\functional-csharp-code\LaYumba.Functional\bin\Debug\netstandard1.6\LaYumba.Functional.dll"

@@ -60,16 +60,19 @@ namespace Exercises.Chapter4
             .Bind(e => e.WorkPermit)
             .Where(HasExpired.Negate());
 
-        static Func<WorkPermit, bool> HasExpired => permit => permit.Expiry > DateTime.Now.Date;  
+        static Func<WorkPermit, bool> HasExpired => permit => permit.Expiry > DateTime.Now.Date;
 
         // 4 Use Bind to implement AverageYearsWorkedAtTheCompany, shown below (only
         // employees who have left should be included).
 
         static double AverageYearsWorkedAtTheCompany(List<Employee> employees)
-        {
-            // your implementation here...
-            throw new NotImplementedException();
-        }
+        => employees
+            .Bind(e => e.LeftOn.Map(leftOn => YearsBetween(e.JoinedOn, leftOn)))
+            .Average(); 
+
+
+        static double YearsBetween(DateTime start, DateTime end)
+        => (end - start).Days / 365; 
     }
 
     public struct WorkPermit

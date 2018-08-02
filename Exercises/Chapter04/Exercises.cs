@@ -51,6 +51,17 @@ namespace Exercises.Chapter4
             throw new NotImplementedException();
         }
 
+        static Option<WorkPermit> GetWorkPer(Dictionary<string, Employee> people, string employeeId)
+            => people.Lookup(employeeId).Bind(e => e.WorkPermit);
+
+        static Option<WorkPermit> GetValidWorkPermit(Dictionary<string, Employee> people, string employeeId)
+            => people
+            .Lookup(employeeId)
+            .Bind(e => e.WorkPermit)
+            .Where(HasExpired.Negate());
+
+        static Func<WorkPermit, bool> HasExpired => permit => permit.Expiry > DateTime.Now.Date;  
+
         // 4 Use Bind to implement AverageYearsWorkedAtTheCompany, shown below (only
         // employees who have left should be included).
 

@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using LaYumba.Functional;
+using static LaYumba.Functional.F; 
 
 namespace Exercises.Chapter4
 {
+    using static F; 
     static class Exercises
     {
         // 1 Implement Map for ISet<T> and IDictionary<K, T>. (Tip: start by writing down
@@ -26,11 +28,18 @@ namespace Exercises.Chapter4
             var rs = new Dictionary<K, R>();
             foreach (var pair in dict)
                 rs[pair.Key] = f(pair.Value);
-            return rs; 
+            return rs;
         }
 
         // 2 Implement Map for Option and IEnumerable in terms of Bind and Return.
 
+        public static Option<R> Map<T, R>(this Option<T> opt, Func<T, R> f)
+            => opt.Bind(t => Some(f(t)));
+
+        public static IEnumerable<R> Map<T, R>(this IEnumerable<T> ts, Func<T, R> f)
+            => ts.Bind(t => List(f(t))); 
+
+        /*Map should do a bind then a return. */
         // 3 Use Bind and an Option-returning Lookup function (such as the one we defined
         // in chapter 3) to implement GetWorkPermit, shown below. 
 

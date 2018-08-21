@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -66,25 +67,6 @@ namespace CsharpPoker
 
         public void Draw(Card card) => cards.Add(card); 
 
-        public Card HighCardOld()
-        {
-            Card highCard = cards.First();
-            foreach (var nextCard in Cards)
-            {
-                if (nextCard.Value > highCard.Value)
-                {
-                    highCard = nextCard;
-                }
-
-            }
-            return highCard;
-
-        }
-
-        public Card HighCardOldy()
-        {
-            return cards.Aggregate((highCard, nextCard) => nextCard.Value > highCard.Value ? nextCard : highCard); 
-        }
 
         public Card HighCard() => cards.Aggregate((highCard, nextCard) => nextCard.Value > highCard.Value ? nextCard : highCard);
 
@@ -92,6 +74,10 @@ namespace CsharpPoker
         public HandRank GetHandRank() =>
             HasRoyalFlush() ? HandRank.RoyalFlush :
             HasFlush() ? HandRank.Flush :
+            HasFullHouse() ? HandRank.FullHouse :
+            HasFourOfAKind() ? HandRank.FourOfAKind : 
+            HasThreeOfAKind() ? HandRank.ThreeOfAKind : 
+            HasPair() ? HandRank.Pair : 
             HandRank.HighCard;
 
         public HandRank GetHandRankOldest()
@@ -108,7 +94,23 @@ namespace CsharpPoker
 
         public bool HasRoyalFlush() => HasFlush() && cards.All(c => c.Value > CardValue.Nine);
 
+        private bool HasOfAKind(int num) => GetKindAndQuantities(cards).Any(c => c.Value == num);
 
+        private bool HasPair() => HasOfAKind(2);
+        private bool HasThreeOfAKind() => HasOfAKind(3);
+        private bool HasFourOfAKind() => HasOfAKind(4);
+        private bool HasFullHouse() => HasPair() && HasThreeOfAKind();
+
+        private IEnumerable<KeyValuePair<CardValue, int>> GetKindAndQuantities(IEnumerable<Card> cards)
+        {
+            var dict = new ConcurrentDictionary<CardValue, int>();
+            foreach (var card in cards)
+            {
+                // Add the value to the dictionary, or increase the count
+                dict.AddOrUpdate(card.Value, 1, (cardValue, quantity) => ++quantity); 
+            }
+            return dict; 
+        }
 
 
         public bool HasRoyalFlushOldest()
@@ -119,5 +121,24 @@ namespace CsharpPoker
         {
             return cards.All(c => cards.First().Suit == c.Suit); 
         }
+        public Card HighCardOld()
+        {
+            Card highCard = cards.First();
+            foreach (var nextCard in Cards)
+            {
+                if (nextCard.Value > highCard.Value)
+                {
+                    highCard = nextCard;
+                }
+
+            }
+            return highCard;
+
+        }
+        public Card HighCardOldy()
+        {
+            return cards.Aggregate((highCard, nextCard) => nextCard.Value > highCard.Value ? nextCard : highCard);
+        }
+
     }
 }
